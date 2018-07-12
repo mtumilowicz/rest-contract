@@ -172,6 +172,14 @@ implementation will do.
         ```
 
 ## client
+* `pom.xml`
+    ```
+    <dependency>
+    	<groupId>org.springframework.cloud</groupId>
+    	<artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
+    	<scope>test</scope>
+    </dependency>
+    ```
 * `client/ClientApplicationTests`
     ```
     @RunWith(SpringRunner.class)
