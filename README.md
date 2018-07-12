@@ -42,7 +42,18 @@ feedback, without the need to set up the whole world of microservices.
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-starter-contract-verifier</artifactId>
         <scope>test</scope>
-    </dependency>    
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-contract-wiremock</artifactId>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>io.rest-assured</groupId>
+        <artifactId>spring-mock-mvc</artifactId>
+        <version>3.0.0</version>
+        <scope>test</scope>
+    </dependency>
     ```
     ```
     <dependencyManagement>
@@ -62,7 +73,6 @@ feedback, without the need to set up the whole world of microservices.
     `groovy/service/BaseClass.groovy`
     ```
     class BaseClass extends Specification {
-        @Before
         void setup() {
             RestAssuredMockMvc.standaloneSetup(new PersonRestController())
     
@@ -72,7 +82,7 @@ feedback, without the need to set up the whole world of microservices.
         }
     }
     ```
-    configure plugin that generates the tests (`pom.xml`):
+    configure plugins:
     ```
     <plugin>
         <groupId>org.springframework.cloud</groupId>
@@ -82,6 +92,45 @@ feedback, without the need to set up the whole world of microservices.
         <configuration>
             <baseClassForTests>service.BaseClass</baseClassForTests>
             <testFramework>SPOCK</testFramework>
+        </configuration>
+    </plugin>
+    
+    <plugin>
+        <groupId>org.codehaus.gmavenplus</groupId>
+        <artifactId>gmavenplus-plugin</artifactId>
+        <version>1.5</version>
+        <executions>
+            <execution>
+                <goals>
+                    <goal>testCompile</goal>
+                </goals>
+            </execution>
+        </executions>
+        <configuration>
+            <testSources>
+                <testSource>
+                    <directory>${project.basedir}/src/test/groovy</directory>
+                    <includes>
+                        <include>**/*.groovy</include>
+                    </includes>
+                </testSource>
+                <testSource>
+                    <directory>${project.build.directory}/generated-test-sources/contracts</directory>
+                    <includes>
+                        <include>**/*.groovy</include>
+                    </includes>
+                </testSource>
+            </testSources>
+        </configuration>
+    </plugin>
+    
+    <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.0</version>
+        <configuration>
+            <includes>
+                <include>**/*Spec.java</include>
+            </includes>
         </configuration>
     </plugin>
     ```
@@ -108,7 +157,7 @@ feedback, without the need to set up the whole world of microservices.
     
     }
     ```
-    configure plugin that generates the tests (`pom.xml`):
+    configure plugin:
     ```
     <plugin>
         <groupId>org.springframework.cloud</groupId>
@@ -120,21 +169,7 @@ feedback, without the need to set up the whole world of microservices.
         </configuration>
     </plugin>
     ```
-    add required dependencies (`pom.xml`):
-    ```
-    <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-contract-wiremock</artifactId>
-        <scope>test</scope>
-    </dependency>
-    <dependency>
-        <groupId>io.rest-assured</groupId>
-        <artifactId>spring-mock-mvc</artifactId>
-        <version>3.0.0</version>
-        <scope>test</scope>
-    </dependency>
-    ```
-    
+
 ## client
 * `client/ClientApplicationTests`
     ```
