@@ -15,7 +15,7 @@ class PersonRestController {
     public PersonRestController(PersonService personService) {
         this.personService = personService;
     }
-
+    
     @GetMapping("/person/{id}")
     public Person findPersonById(@PathVariable("id") Long id) {
         return personService.findPersonById(1);
