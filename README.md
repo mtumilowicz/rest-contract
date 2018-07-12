@@ -10,9 +10,9 @@ other Spring application.
 When trying to test an application that communicates with other services 
 then we could do one of two things:
 
-* deploy all microservices and perform end to end tests
+* deploy all microservices and perform end to end tests,
 
-* mock other microservices in unit / integration tests
+* mock other microservices in unit / integration tests.
 
 To solve the second issues `Spring Cloud Contract Verifier` with 
 `Stub Runner` were created. Their main idea is to give you very fast 
@@ -20,16 +20,16 @@ feedback, without the need to set up the whole world of microservices.
 
 # Spring Cloud Contract Verifier features
 
-* ensure that HTTP / Messaging stubs (used when developing the client) are doing exactly what actual server-side implementation will do
+* Ensure that HTTP / Messaging stubs (used when developing the client) are doing exactly what actual server-side 
+implementation will do.
 
-* promote acceptance test driven development method and Microservices architectural style
+* Promote acceptance test driven development method and Microservices architectural style.
 
-* provide a way to publish changes in contracts that are immediately visible on both sides of the communication
+* Provide a way to publish changes in contracts that are immediately visible on both sides of the communication.
 
-* generate boilerplate test code used on the server side
+* Generate boilerplate test code used on the server side.
 
 # manual
-## Server / Producer side
 * `pom.xml`
     ```
     <properties>
@@ -68,6 +68,7 @@ feedback, without the need to set up the whole world of microservices.
         </dependencies>
     </dependencyManagement>    
     ```
+## Server / Producer side
 * Add the base class
     * Groovy
     `groovy/service/BaseClass.groovy`
@@ -180,7 +181,7 @@ feedback, without the need to set up the whole world of microservices.
     public class ClientApplicationTests
     ```
     
-    Note that we could load the stub inside the class:
+    Note that we could also load the stub inside the class (without using `@AutoConfigureStubRunner`):
     ```
     @Rule
     public StubRunnerRule stubRunnerRule = new StubRunnerRule()
