@@ -70,7 +70,7 @@ implementation will do.
     ```
 ## Server / Producer side
 * Add the base class
-    * **Groovy**
+    * **Groovy**  
         `groovy/service/BaseClass.groovy`
         ```
         class BaseClass extends Specification {
