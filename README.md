@@ -70,106 +70,106 @@ implementation will do.
     ```
 ## Server / Producer side
 * Add the base class
-    * Groovy
-    `groovy/service/BaseClass.groovy`
-    ```
-    class BaseClass extends Specification {
-        void setup() {
-            RestAssuredMockMvc.standaloneSetup(new PersonRestController())
-    
-            Mock(PersonService) {
-                findPersonById(1) >> new Person(1, "foo", "bee")
+    * **Groovy**
+        `groovy/service/BaseClass.groovy`
+        ```
+        class BaseClass extends Specification {
+            void setup() {
+                RestAssuredMockMvc.standaloneSetup(new PersonRestController())
+        
+                Mock(PersonService) {
+                    findPersonById(1) >> new Person(1, "foo", "bee")
+                }
             }
         }
-    }
-    ```
-    configure plugins:
-    ```
-    <plugin>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-contract-maven-plugin</artifactId>
-        <version>${spring-cloud-contract.version}</version>
-        <extensions>true</extensions>
-        <configuration>
-            <baseClassForTests>service.BaseClass</baseClassForTests>
-            <testFramework>SPOCK</testFramework>
-        </configuration>
-    </plugin>
+        ```
+        configure plugins:
+        ```
+        <plugin>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-contract-maven-plugin</artifactId>
+            <version>${spring-cloud-contract.version}</version>
+            <extensions>true</extensions>
+            <configuration>
+                <baseClassForTests>service.BaseClass</baseClassForTests>
+                <testFramework>SPOCK</testFramework>
+            </configuration>
+        </plugin>
+        
+        <plugin>
+            <groupId>org.codehaus.gmavenplus</groupId>
+            <artifactId>gmavenplus-plugin</artifactId>
+            <version>1.5</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>testCompile</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <testSources>
+                    <testSource>
+                        <directory>${project.basedir}/src/test/groovy</directory>
+                        <includes>
+                            <include>**/*.groovy</include>
+                        </includes>
+                    </testSource>
+                    <testSource>
+                        <directory>${project.build.directory}/generated-test-sources/contracts</directory>
+                        <includes>
+                            <include>**/*.groovy</include>
+                        </includes>
+                    </testSource>
+                </testSources>
+            </configuration>
+        </plugin>
+        
+        <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.22.0</version>
+            <configuration>
+                <includes>
+                    <include>**/*Spec.java</include>
+                </includes>
+            </configuration>
+        </plugin>
+        ```
     
-    <plugin>
-        <groupId>org.codehaus.gmavenplus</groupId>
-        <artifactId>gmavenplus-plugin</artifactId>
-        <version>1.5</version>
-        <executions>
-            <execution>
-                <goals>
-                    <goal>testCompile</goal>
-                </goals>
-            </execution>
-        </executions>
-        <configuration>
-            <testSources>
-                <testSource>
-                    <directory>${project.basedir}/src/test/groovy</directory>
-                    <includes>
-                        <include>**/*.groovy</include>
-                    </includes>
-                </testSource>
-                <testSource>
-                    <directory>${project.build.directory}/generated-test-sources/contracts</directory>
-                    <includes>
-                        <include>**/*.groovy</include>
-                    </includes>
-                </testSource>
-            </testSources>
-        </configuration>
-    </plugin>
-    
-    <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.22.0</version>
-        <configuration>
-            <includes>
-                <include>**/*Spec.java</include>
-            </includes>
-        </configuration>
-    </plugin>
-    ```
-    
-    * JUnit
-    ```
-    @RunWith(SpringRunner.class)
-    @SpringBootTest(classes = ServiceApplication.class)
-    public abstract class BaseClass {
-    
-        @Autowired
-        PersonRestController personRestController;
-    
-        @MockBean
-        PersonService personService;
-    
-        @Before
-        public void setup() {
-            RestAssuredMockMvc.standaloneSetup(personRestController);
-    
-            Mockito.when(personService.findPersonById(1))
-                    .thenReturn(new Person(1, "foo", "bee"));
+    * **JUnit**
+        ```
+        @RunWith(SpringRunner.class)
+        @SpringBootTest(classes = ServiceApplication.class)
+        public abstract class BaseClass {
+        
+            @Autowired
+            PersonRestController personRestController;
+        
+            @MockBean
+            PersonService personService;
+        
+            @Before
+            public void setup() {
+                RestAssuredMockMvc.standaloneSetup(personRestController);
+        
+                Mockito.when(personService.findPersonById(1))
+                        .thenReturn(new Person(1, "foo", "bee"));
+            }
+        
         }
-    
-    }
-    ```
-    configure plugin:
-    ```
-    <plugin>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-contract-maven-plugin</artifactId>
-        <version>${spring-cloud-contract.version}</version>
-        <extensions>true</extensions>
-        <configuration>
-            <baseClassForTests>service.BaseClass</baseClassForTests>
-        </configuration>
-    </plugin>
-    ```
+        ```
+        configure plugin:
+        ```
+        <plugin>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-contract-maven-plugin</artifactId>
+            <version>${spring-cloud-contract.version}</version>
+            <extensions>true</extensions>
+            <configuration>
+                <baseClassForTests>service.BaseClass</baseClassForTests>
+            </configuration>
+        </plugin>
+        ```
 
 ## client
 * `client/ClientApplicationTests`
